@@ -57,10 +57,21 @@ public class Locadora {
 				return car;
 		}
 		
-		throw new ModelException("Carro não localizado");
+		throw new ModelException("Carro não cadastrado");
 	}
 	
 	public void addCliente(Cliente client){
 		clientes.add(client);
+	}
+	
+	
+	public Cliente localizarCliente(String cpf) throws ModelException{
+		
+		for(Cliente client: clientes){
+			if(client.getCpf().equals(cpf))
+				return client;
+		}
+		
+		throw new ModelException("Cliente não cadastrado");
 	}
 }

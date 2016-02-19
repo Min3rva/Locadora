@@ -1,7 +1,9 @@
 package system;
 
 import model.*;
+import exceptions.ModelException;
 import exceptions.SystemException;
+
 import java.util.Date;
 
 public class Sistema{
@@ -16,7 +18,7 @@ public class Sistema{
 			client = new Cliente(nome, cpf);
 			locadora.addCliente(client);
 		}
-		else throw new SystemException("CPF Inválido");
+		else throw new SystemException("CPF Inválido!");
 		
 		return client;
 	}
@@ -30,15 +32,50 @@ public class Sistema{
 			car = new Carro(placa, modelo);
 			locadora.addCarro(car);
 		}
-		else throw new SystemException("Placa Inválida");
+		else throw new SystemException("Placa Inválida!");
 		
 		return null;
 	}
 	
-	
-	//Issues: Validar cpf do cliente e placa
-	public static Aluguel alugarCarro(String cpf, String placa, Double diaria, Date datafinal){
-		return new Aluguel(datafinal, diaria);
+
+	public static Aluguel alugarCarro(String cpf, String placa, Double diaria, Date datafinal) 
+																		throws SystemException{
+		
+		Aluguel result  = null;
+		
+		if(Util.validarCPF(cpf))
+		{
+			Cliente client = null;
+			
+			try{
+				client = locadora.localizarCliente(cpf);
+			
+				if(Util.validarPlacaCarro(placa)){
+					Carro car = null;
+					try{
+						car = locadora.localizarCarro(placa);
+						
+						if(!car.isAlugado()){
+							result =  new Aluguel(new Date(), datafinal, diaria, car, client);
+							car.addAluguel(result);
+							car.setAlugado(true);
+						}
+						else throw new SystemException("Carro está alugado!");
+					}
+					catch (ModelException e){
+						System.out.println(e.getMessage());
+					}
+					
+				}else throw new SystemException("Placa Inválida!");
+				
+			}
+			catch(ModelException e){
+				System.out.println(e.getMessage());
+			}
+				
+		}else throw new SystemException("CPF Inválido!");
+		
+		return result;
 	}
 	
 	

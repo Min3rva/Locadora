@@ -10,30 +10,9 @@ import java.util.Date;
 public class TesteModel {
 	public static void main(String args[]){
 		
-		Carro car = new Carro("AXD1526");
-		Locadora l = new Locadora();
-		
-		l.addCarro(car);
-		
-		/**Testa o método localizarCarro da Locadora**/
-		
-		try{
-			l.localizarCarro("AXD1526");
-			System.out.println("Carro encontrado");
-		}
-		catch(ModelException me){
-			System.out.println("Carro não encontrado");
-		}
-		
-		try{
-			l.localizarCarro("ABC1515");
-			System.out.println("Carro encontrado");
-		}
-		catch(ModelException me){
-			System.out.println("Carro não encontrado");
-		}
-		
-		/*********************************************/
+		if(Util.validarPlacaCarro("talq1010"))
+			System.out.println("Placa válida");
+		else System.out.println("Placa inválida");
 
 		
 	}	

@@ -13,12 +13,22 @@ public class Aluguel {
 	private Cliente cliente;
 	
 	
-	public Aluguel(Date fim, Double diaria){
-		datainicio = new Date();
+	public Aluguel(Date inicio, Date fim, Double diaria, Carro car, Cliente client){
+		datainicio = inicio;
 		datafim = fim;
 		valor = diaria;
+		carro = car;
+		cliente = client;
 	}
 	
+	@Override
+	public String toString() {
+		return "Aluguel [id=" + id + ", datainicio=" + datainicio
+				+ ", datafim=" + datafim + ", valor=" + valor + ", finalizado="
+				+ finalizado + ", carro=" + carro + ", cliente=" + cliente
+				+ "]";
+	}
+
 	public int getId() {
 		return id;
 	}

@@ -20,7 +20,7 @@ public class Util {
 			}
 			
 			for(int i=3; i<7; i++){
-				if( !((placa.charAt(i) >= '0') || (placa.charAt(i) <= '9')) ){
+				if( !((placa.charAt(i) >= '0') && (placa.charAt(i) <= '9')) ){
 					return false;
 				}
 			}

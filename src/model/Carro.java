@@ -47,5 +47,9 @@ public class Carro {
 	public void setAlugueis(ArrayList<Aluguel> alugueis) {
 		this.alugueis = alugueis;
 	}
+	
+	public void addAluguel(Aluguel aluguel){
+		alugueis.add(aluguel);
+	}
 
 }
