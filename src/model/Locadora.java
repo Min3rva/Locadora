@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import exceptions.ModelException;
 
 public class Locadora {
 	
@@ -9,6 +10,10 @@ public class Locadora {
 	private ArrayList<Carro> carros 	= new ArrayList<Carro>();
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
+	
+	public Locadora(){
+		//TODO
+	}
 	
 	public String getNome() {
 		return nome;
@@ -42,4 +47,17 @@ public class Locadora {
 		this.alugueis = alugueis;
 	}
 	
+	public void addCarro(Carro car){
+		carros.add(car);
+	}
+	
+	public Carro localizarCarro(String placa) throws ModelException{
+		
+		for(Carro car: carros){
+			if(car.getPlaca().equals(placa))
+				return car;
+		}
+		
+		throw new ModelException("Carro não localizado");
+	}
 }
