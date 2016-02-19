@@ -4,16 +4,14 @@ public class Util {
 	
 	public static boolean validarCPF(String cpf) {
 		//TODO
-		return false;
+		return true;
 	}
 	
 	public static boolean validarPlacaCarro(String placa){
 		
 		if(placa.length() == 7){
 			
-			placa.toUpperCase();
-			
-			System.out.println(placa);
+			placa = placa.toUpperCase();
 			
 			for(int i=0; i<3; i++){
 				if( !((placa.charAt(i) >= 'A') && (placa.charAt(i) <= 'Z')) ){
