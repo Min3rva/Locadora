@@ -10,7 +10,6 @@ public class Locadora {
 	private ArrayList<Carro> carros 	= new ArrayList<Carro>();
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
-	
 	public Locadora(){
 		//TODO
 	}
@@ -59,5 +58,9 @@ public class Locadora {
 		}
 		
 		throw new ModelException("Carro não localizado");
+	}
+	
+	public void addCliente(Cliente client){
+		clientes.add(client);
 	}
 }

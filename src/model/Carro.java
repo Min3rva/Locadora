@@ -10,8 +10,10 @@ public class Carro {
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
 	
-	public Carro(String placa){
+	public Carro(String placa, String modelo){
 		this.placa = placa;
+		this.modelo = modelo;
+		alugado = false;
 	}
 	
 	public String getPlaca() {

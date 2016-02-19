@@ -8,8 +8,9 @@ public class Cliente {
 	private String cpf;
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
-	public Cliente(){
-		//TODO
+	public Cliente(String nome, String cpf){
+		this.nome = nome;
+		this.cpf = cpf;
 	}
 		
 	public String getNome() {
