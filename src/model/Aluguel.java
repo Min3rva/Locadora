@@ -13,6 +13,12 @@ public class Aluguel {
 	private Cliente cliente;
 	
 	
+	public Aluguel(Date fim, Double diaria){
+		datainicio = new Date();
+		datafim = fim;
+		valor = diaria;
+	}
+	
 	public int getId() {
 		return id;
 	}
