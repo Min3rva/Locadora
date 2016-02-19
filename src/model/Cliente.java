@@ -8,6 +8,10 @@ public class Cliente {
 	private String cpf;
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
+	public Cliente(){
+		//TODO
+	}
+		
 	public String getNome() {
 		return nome;
 	}
