@@ -4,6 +4,7 @@ import model.*;
 import exceptions.ModelException;
 import exceptions.SystemException;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Sistema{
@@ -15,8 +16,14 @@ public class Sistema{
 		Cliente client = null;
 		
 		if(Util.validarCPF(cpf)){
-			client = new Cliente(nome, cpf);
-			locadora.addCliente(client);
+			try{
+				locadora.localizarCliente(cpf);
+				throw new SystemException("Cliente já cadastrado!");
+			}
+			catch (ModelException e){
+				client = new Cliente(nome, cpf);
+				locadora.addCliente(client);
+			}
 		}
 		else throw new SystemException("CPF Inválido!");
 		
@@ -29,8 +36,14 @@ public class Sistema{
 		Carro car = null;
 		
 		if(Util.validarPlacaCarro(placa)){
-			car = new Carro(placa, modelo);
-			locadora.addCarro(car);
+			try{
+				locadora.localizarCarro(placa);
+				throw new SystemException("Carro já cadastrado!");
+			}
+			catch (ModelException e){
+				car = new Carro(placa, modelo);
+				locadora.addCarro(car);
+			}
 		}
 		else throw new SystemException("Placa Inválida!");
 		
@@ -38,7 +51,7 @@ public class Sistema{
 	}
 	
 
-	public static Aluguel alugarCarro(String cpf, String placa, Double diaria, Date datafinal) 
+	public static Aluguel alugarCarro(String cpf, String placa, double diaria, Date datafinal) 
 																		throws SystemException{
 		
 		Aluguel result  = null;
@@ -52,12 +65,17 @@ public class Sistema{
 			
 				if(Util.validarPlacaCarro(placa)){
 					Carro car = null;
+					
 					try{
 						car = locadora.localizarCarro(placa);
 						
 						if(!car.isAlugado()){
-							result =  new Aluguel(new Date(), datafinal, diaria, car, client);
+							int id = locadora.getAlugueis().size();
+							result =  new Aluguel(id, new Date(), datafinal, diaria, car, client);
+							locadora.addAluguel(result);
+
 							car.addAluguel(result);
+							client.addAluguel(result);
 							car.setAlugado(true);
 						}
 						else throw new SystemException("Carro está alugado!");
@@ -79,30 +97,109 @@ public class Sistema{
 	}
 	
 	
-	public static void devolverCarro(){
-		//TODO
+	public static void devolverCarro(String placa) throws SystemException{
+		
+		if(Util.validarPlacaCarro(placa)){
+			
+			Carro car = null;
+			
+			try{
+				
+				car = locadora.localizarCarro(placa);
+				
+				Date data = new Date();
+				ArrayList<Aluguel> listAlugueis = car.getAlugueis();
+				Aluguel aluguel = listAlugueis.get(listAlugueis.size()-1);
+				
+				long di = aluguel.getDatainicio().getTime()/86400000;
+				long df = data.getTime()/86400000;
+				double diaria = aluguel.getDiaria();
+				
+				double newValor = (df-di) <= 0 ?  (di-df)*diaria : (df-di)*2*diaria + aluguel.getValor();
+				
+				/* Paga no minimo uma diária caso o carro seja devolvido antes de 24h
+				 * Preço mínimo do aluguel
+				 */
+				aluguel.setValor(newValor > 0 ? newValor : diaria);
+				aluguel.setFinalizado(true);
+				car.setAlugado(false);
+				
+			}
+			catch (ModelException e){
+				System.out.println(e.getMessage());
+			}
+			
+		}else throw new SystemException("Placa inválida!");
+		
 	}
 	
 	
-	public static String listarClientes(){
-		//TODO
-		return null;
+	public static String listarClientes() throws SystemException{
+		String stringClientes = "";
+		ArrayList<Cliente> listaClientes = locadora.getClientes();
+		
+		if(!listaClientes.isEmpty()){
+			for(Cliente client: listaClientes){
+				stringClientes+="Nome:" + client.getNome() + "-CPF:" + client.getCpf() + ";";
+			}
+		}
+		else throw new SystemException("Não existem clientes cadastrados!");
+		
+		return stringClientes;
 	}
 	
 	
-	public static String listarCarros(){
-		//TODO
-		return null;
+	public static String listarCarros() throws SystemException{
+		String stringCarros = "";
+		ArrayList<Carro> listaCarros = locadora.getCarros();
+		
+		if(!listaCarros.isEmpty()){
+			for(Carro car: listaCarros){
+				stringCarros+="Placa:" + car.getPlaca() + "-Modelo:" + car.getModelo() + ";";
+			}
+		}
+		else throw new SystemException("Não existem carros cadastrados!");
+		
+		return stringCarros;
 	}
 	
-	public static String listarAlugueisFinalizados(){
-		//TODO
-		return null;
+	public static String listarAlugueisFinalizados() throws SystemException{
+		String stringAlugueis = "";
+		ArrayList<Aluguel> listaAlugueis = locadora.getAlugueis();
+		
+		if(!listaAlugueis.isEmpty()){
+			for(Aluguel alug: listaAlugueis){
+				if(alug.isFinalizado())
+					stringAlugueis+="ID:" + alug.getId() + "-Cliente:" + alug.getCliente().getNome() + "-Carro:" +
+							alug.getCarro().getPlaca() + "-Valor:" + alug.getValor() + "-Inicio: " + 
+							Util.formataData(alug.getDatainicio()) + "-Fim: "  + Util.formataData(alug.getDatafim()) + ";";
+			}
+			
+			if(stringAlugueis == null) throw new SystemException("Não existem alugueis finalizados!");
+		}
+		else throw new SystemException("Não exisem alugueis cadastrados!");
+		
+		return stringAlugueis;
 	}
 	
-	public static String listarAlugueisHoje(){
-		//TODO
-		return null;
+	public static String listarAlugueisHoje() throws SystemException{
+		String alugueisHoje = "";
+		ArrayList<Aluguel> listaAlugueis = locadora.getAlugueis();
+		Date today = new Date();
+		
+		if(!listaAlugueis.isEmpty()){
+			for(Aluguel alug: listaAlugueis){
+				long diffTime = today.getTime() - alug.getDatainicio().getTime();
+				
+				if(diffTime/86400000 <= 24){
+					alugueisHoje+="ID:" + alug.getId() + "-Cliente:" + alug.getCliente().getNome() + "-Carro:" +
+							alug.getCarro().getPlaca() + "-Valor:" + alug.getValor() + "-Inicio:" + 
+							Util.formataData(alug.getDatainicio()) + "-Fim:"  + Util.formataData(alug.getDatafim()) + ";";
+				}
+			}
+		}else throw new SystemException("Não existem alugueis cadastrados!");
+		
+		return alugueisHoje;
 	}
 	
 }

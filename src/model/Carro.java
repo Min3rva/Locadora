@@ -2,13 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
+import exceptions.ModelException;
+
 public class Carro {
 	
 	private String placa;
 	private String modelo;
 	private boolean alugado;
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
-	
 	
 	public Carro(String placa, String modelo){
 		this.placa = placa;
@@ -18,7 +19,7 @@ public class Carro {
 	
 	@Override
 	public String toString() {
-		return "Carro [placa=" + placa + ", modelo=" + modelo + ", alugado=" + alugado + ", alugueis=" + alugueis + "]";
+		return "Carro [placa=" + placa + ", modelo=" + modelo + ", alugado=" + alugado + ", alugueis=" + alugueis.size() + "]";
 	}
 	
 
@@ -56,6 +57,16 @@ public class Carro {
 	
 	public void addAluguel(Aluguel aluguel){
 		alugueis.add(aluguel);
+	}
+	
+	public Aluguel localizarAluguel(int id) throws ModelException{
+		
+		for(Aluguel aluguel: alugueis){
+			if(aluguel.getId() == id)
+				return aluguel;
+		}
+		
+		throw new ModelException("Aluguel não cadastrado!");
 	}
 
 }

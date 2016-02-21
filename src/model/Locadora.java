@@ -63,7 +63,7 @@ public class Locadora {
 				return car;
 		}
 		
-		throw new ModelException("Carro não cadastrado");
+		throw new ModelException("Carro não cadastrado!");
 	}
 	
 	public void addCliente(Cliente client){
@@ -78,6 +78,20 @@ public class Locadora {
 				return client;
 		}
 		
-		throw new ModelException("Cliente não cadastrado");
+		throw new ModelException("Cliente não cadastrado!");
+	}
+	
+	public void addAluguel(Aluguel aluguel){
+		alugueis.add(aluguel);
+	}
+	
+	public Aluguel localizarAluguel(int id) throws ModelException{
+		
+		for(Aluguel aluguel: alugueis){
+			if(aluguel.getId() == id)
+				return aluguel;
+		}
+		
+		throw new ModelException("Aluguel não cadastrado!");
 	}
 }

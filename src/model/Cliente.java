@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import exceptions.ModelException;
+
 public class Cliente {
 	
 	private String nome;
@@ -15,7 +17,7 @@ public class Cliente {
 	
 	@Override
 	public String toString() {
-		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", alugueis=" + alugueis + "]";
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", alugueis=" + alugueis.size() + "]";
 	}
 	
 	public String getNome() {
@@ -40,6 +42,25 @@ public class Cliente {
 	
 	public void setAlugueis(ArrayList<Aluguel> alugueis) {
 		this.alugueis = alugueis;
+	}
+	
+	public void addAluguel(Aluguel aluguel){
+		try{
+			alugueis.add(aluguel);
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public Aluguel localizarAluguel(int id) throws ModelException{
+		
+		for(Aluguel aluguel: alugueis){
+			if(aluguel.getId() == id)
+				return aluguel;
+		}
+		
+		throw new ModelException("Aluguel não cadastrado!");
 	}
 
 }
