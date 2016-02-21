@@ -55,43 +55,47 @@ public class Sistema{
 																		throws SystemException{
 		
 		Aluguel result  = null;
+		Date today = new Date();
 		
-		if(Util.validarCPF(cpf))
+		if(datafinal.getTime() > today.getTime())
 		{
-			Cliente client = null;
-			
-			try{
-				client = locadora.localizarCliente(cpf);
-			
-				if(Util.validarPlacaCarro(placa)){
-					Carro car = null;
-					
-					try{
-						car = locadora.localizarCarro(placa);
+			if(Util.validarCPF(cpf))
+			{
+				Cliente client = null;
+				
+				try{
+					client = locadora.localizarCliente(cpf);
+				
+					if(Util.validarPlacaCarro(placa)){
+						Carro car = null;
 						
-						if(!car.isAlugado()){
-							int id = locadora.getAlugueis().size();
-							result =  new Aluguel(id, new Date(), datafinal, diaria, car, client);
-							locadora.addAluguel(result);
-
-							car.addAluguel(result);
-							client.addAluguel(result);
-							car.setAlugado(true);
+						try{
+							car = locadora.localizarCarro(placa);
+							
+							if(!car.isAlugado()){
+								int id = locadora.getAlugueis().size();
+								result =  new Aluguel(id, today, datafinal, diaria, car, client);
+								locadora.addAluguel(result);
+	
+								car.addAluguel(result);
+								client.addAluguel(result);
+								car.setAlugado(true);
+							}
+							else throw new SystemException("Carro está alugado!");
 						}
-						else throw new SystemException("Carro está alugado!");
-					}
-					catch (ModelException e){
-						System.out.println(e.getMessage());
-					}
+						catch (ModelException e){
+							System.out.println(e.getMessage());
+						}
+						
+					}else throw new SystemException("Placa Inválida!");
 					
-				}else throw new SystemException("Placa Inválida!");
-				
-			}
-			catch(ModelException e){
-				System.out.println(e.getMessage());
-			}
-				
-		}else throw new SystemException("CPF Inválido!");
+				}
+				catch(ModelException e){
+					System.out.println(e.getMessage());
+				}
+					
+			}else throw new SystemException("CPF Inválido!");
+		}else throw new SystemException("Data final menor que inicial!");
 		
 		return result;
 	}
