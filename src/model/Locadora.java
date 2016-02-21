@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import exceptions.ModelException;
 
 public class Locadora {
-	
+
 	private String nome;
 	private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 	private ArrayList<Carro> carros 	= new ArrayList<Carro>();
@@ -12,6 +12,12 @@ public class Locadora {
 	
 	public Locadora(){
 		//TODO
+	}
+	
+	@Override
+	public String toString() {
+		return "Locadora [nome=" + nome + ", clientes=" + clientes + ", carros=" + carros + ", alugueis=" + alugueis
+				+ "]";
 	}
 	
 	public String getNome() {

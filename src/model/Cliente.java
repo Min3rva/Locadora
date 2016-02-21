@@ -12,7 +12,12 @@ public class Cliente {
 		this.nome = nome;
 		this.cpf = cpf;
 	}
-		
+	
+	@Override
+	public String toString() {
+		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", alugueis=" + alugueis + "]";
+	}
+	
 	public String getNome() {
 		return nome;
 	}

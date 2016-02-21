@@ -16,6 +16,12 @@ public class Carro {
 		alugado = false;
 	}
 	
+	@Override
+	public String toString() {
+		return "Carro [placa=" + placa + ", modelo=" + modelo + ", alugado=" + alugado + ", alugueis=" + alugueis + "]";
+	}
+	
+
 	public String getPlaca() {
 		return placa;
 	}

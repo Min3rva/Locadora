@@ -23,10 +23,8 @@ public class Aluguel {
 	
 	@Override
 	public String toString() {
-		return "Aluguel [id=" + id + ", datainicio=" + datainicio
-				+ ", datafim=" + datafim + ", valor=" + valor + ", finalizado="
-				+ finalizado + ", carro=" + carro + ", cliente=" + cliente
-				+ "]";
+		return "Aluguel [id=" + id + ", datainicio=" + datainicio + ", datafim=" + datafim + ", valor=" + valor
+				+ ", finalizado=" + finalizado + ", carro=" + carro + ", cliente=" + cliente + "]";
 	}
 
 	public int getId() {
@@ -84,5 +82,7 @@ public class Aluguel {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
+	
+	
 
 }

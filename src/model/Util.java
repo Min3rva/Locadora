@@ -9,24 +9,10 @@ public class Util {
 	
 	public static boolean validarPlacaCarro(String placa){
 		
-		if(placa.length() == 7){
-			
-			placa = placa.toUpperCase();
-			
-			for(int i=0; i<3; i++){
-				if( !((placa.charAt(i) >= 'A') && (placa.charAt(i) <= 'Z')) ){
-					return false;
-				}
-			}
-			
-			for(int i=3; i<7; i++){
-				if( !((placa.charAt(i) >= '0') && (placa.charAt(i) <= '9')) ){
-					return false;
-				}
-			}
+		if (placa.matches("[A-Za-z]{3}\\d{4}")){
+			return true;
 		}
-		else return false;
 		
-		return true;
+		return false;
 	}
 }
