@@ -51,13 +51,12 @@ public class Sistema{
 	}
 	
 
-	public static Aluguel alugarCarro(String cpf, String placa, double diaria, Date datafinal) 
+	public static Aluguel alugarCarro(String cpf, String placa, double diaria, Date datainicio, Date datafinal) 
 																		throws SystemException{
 		
 		Aluguel result  = null;
-		Date today = new Date();
 		
-		if(datafinal.getTime() > today.getTime())
+		if(datafinal.getTime() > datainicio.getTime())
 		{
 			if(Util.validarCPF(cpf))
 			{
@@ -74,7 +73,7 @@ public class Sistema{
 							
 							if(!car.isAlugado()){
 								int id = locadora.getAlugueis().size();
-								result =  new Aluguel(id, today, datafinal, diaria, car, client);
+								result =  new Aluguel(id, datainicio, datafinal, diaria, car, client);
 								locadora.addAluguel(result);
 	
 								car.addAluguel(result);
