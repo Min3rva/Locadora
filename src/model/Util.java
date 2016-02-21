@@ -27,4 +27,11 @@ public class Util {
 		
 		return dataFormatada;
 	}
+	
+	public static String formataDataDia(Date data){
+		SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+		String dataFormatada = fmt.format(data);
+		
+		return dataFormatada;
+	}
 }

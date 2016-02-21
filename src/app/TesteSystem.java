@@ -23,19 +23,19 @@ public class TesteSystem {
 				System.out.println("Cadastro realizado!");
 				
 				try{
-					GregorianCalendar data = new GregorianCalendar(2016, 1, 23, 19, 30);
+					GregorianCalendar data = new GregorianCalendar(2016, 1, 21, 20, 30);
 					Sistema.alugarCarro("016.371.734-66", "taa1010", 15.2, data.getTime());
 					Sistema.alugarCarro("016.371.734-64", "tal4155", 15.2, data.getTime());
 					Sistema.devolverCarro("taa1010");
 					String alug = Sistema.listarAlugueisFinalizados();
-					System.out.println(alug);
-					Sistema.alugarCarro("016.371.734-64", "taa1010", 15.2, data.getTime());
+					System.out.println("Finalizados=" + alug);
+					//Sistema.alugarCarro("016.371.734-64", "taa1010", 15.2, data.getTime());
 					alug = Sistema.listarClientes();
 					System.out.println(alug);
 					alug = Sistema.listarCarros();
 					System.out.println(alug);
 					alug = Sistema.listarAlugueisHoje();
-					System.out.println(alug);
+					System.out.println("Finalizar Hoje: " + alug);
 				}
 				catch (Exception e){
 					System.out.println(e.getMessage());

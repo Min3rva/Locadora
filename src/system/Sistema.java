@@ -189,14 +189,18 @@ public class Sistema{
 		
 		if(!listaAlugueis.isEmpty()){
 			for(Aluguel alug: listaAlugueis){
-				long diffTime = today.getTime() - alug.getDatainicio().getTime();
+				Date fim = alug.getDatafim();
 				
-				if(diffTime/86400000 <= 24){
+				if( Util.formataDataDia(today).equals(Util.formataDataDia(fim) ) && !alug.isFinalizado()){
 					alugueisHoje+="ID:" + alug.getId() + "-Cliente:" + alug.getCliente().getNome() + "-Carro:" +
 							alug.getCarro().getPlaca() + "-Valor:" + alug.getValor() + "-Inicio:" + 
 							Util.formataData(alug.getDatainicio()) + "-Fim:"  + Util.formataData(alug.getDatafim()) + ";";
 				}
 			}
+			
+			if(alugueisHoje.equals("")) 
+				throw new SystemException("Não existem alugueis a serem finalizados hoje!");
+			
 		}else throw new SystemException("Não existem alugueis cadastrados!");
 		
 		return alugueisHoje;
