@@ -14,6 +14,7 @@ public class Application {
 	public static void main(String args[]){
 		Scanner sc = new Scanner(System.in);
 		
+		//Cadastro prévio de clientes e carros
 		flow00();
 		
 		int op = 1;
@@ -22,16 +23,28 @@ public class Application {
 			showMenu();
 			op = sc.nextInt();
 			
-			flow01();
-			
-//			switch(op){
-//			case 1:
-//				
-//			}
+			switch(op){
+			case 1:
+				flow01();
+				break;
+			case 2:
+				flow02();
+				break;
+			case 3:
+				flow03();
+				break;
+			case 4:
+				flow04();
+				break;
+			case 5:
+				flow05();
+				break;
+			case 6:
+				flow06();
+				break;
+			}
 			
 		}
-		
-		System.out.println("saiu");
 		
 	}
 	
@@ -47,9 +60,29 @@ public class Application {
 		
 	}
 	
+	public static void flow00(){
+		try{
+			Sistema.cadastrarCliente("Joãozinho", "016.123.753-10");
+			Sistema.cadastrarCliente("Mariazinha", "016.123.753-11");
+			Sistema.cadastrarCliente("Zezinho", "016.123.753-12");
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+			Sistema.cadastrarCarro("ABC0000", "Gol");
+			Sistema.cadastrarCarro("ABC0001", "Uno");
+			Sistema.cadastrarCarro("ABC0002", "Palio");
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
 	public static void flow01(){
 		Scanner cs = new Scanner(System.in);
-		String cpf, placa, di, df, hi, hf;;
+		String cpf, placa, di, df, hi, hf;
 		double diaria;
 		
 		System.out.print("CPF (nnn.nnn.nnn-nn): ");
@@ -80,43 +113,85 @@ public class Application {
 
 			try{
 				Aluguel alug = Sistema.alugarCarro(cpf, placa, diaria, calendarInit.getTime(), calendarFinal.getTime());
-				System.out.println("Aluguel realizado com sucesso!\nValor: " + alug.getValor());
+				System.out.println("Aluguel realizado com sucesso!\nValor do aluguel: " + alug.getValor());
 			}
 			catch (Exception e){
 				System.out.println(e.getMessage());
 			}
-			
-			
-			
 		}
-		
-		
-//		try{
-//			
-//		}
-//		catch (Exception e){
-//			System.out.println(e.getMessage());
-//		}
 	}
 	
-	public static void flow00(){
-		try{
-			Sistema.cadastrarCliente("Joãozinho", "016.123.753-10");
-			Sistema.cadastrarCliente("Mariazinha", "016.123.753-11");
-			Sistema.cadastrarCliente("Zezinho", "016.123.753-12");
-		}
-		catch (Exception e){
-			System.out.println(e.getMessage());
-		}
+	public static void flow02(){
+		Scanner cs = new Scanner(System.in);
+		String placa;
+		
+		System.out.println("Placa do carro (AAANNNN): ");
+		placa = cs.next();
 		
 		try{
-			Sistema.cadastrarCarro("ABC0000", "Gol");
-			Sistema.cadastrarCarro("ABC0001", "Uno");
-			Sistema.cadastrarCarro("ABC0002", "Palio");
+			Sistema.devolverCarro(placa);
+			System.out.println("Carro devolvido com sucesso!");
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public static void flow03(){
+		try{
+			String lista = Sistema.listarClientes();
+			String[] array = lista.split(";");
+			
+			for(String str: array){
+				System.out.println(str);
+			}
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void flow04(){
+		try{
+			String lista = Sistema.listarCarros();
+			String[] array = lista.split(";");
+			
+			for(String str: array){
+				System.out.println(str);
+			}
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void flow05(){
+		try{
+			String lista = Sistema.listarAlugueisFinalizados();
+			String[] array = lista.split(";");
+			
+			for(String str: array){
+				System.out.println(str);
+			}
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void flow06(){
+		try{
+			String lista = Sistema.listarAlugueisHoje();
+			String[] array = lista.split(";");
+			
+			for(String str: array){
+				System.out.println(str);
+			}
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
 	
 }

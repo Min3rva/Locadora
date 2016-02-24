@@ -143,7 +143,13 @@ public class Sistema{
 		
 		if(!listaClientes.isEmpty()){
 			for(Cliente client: listaClientes){
-				stringClientes+="Nome:" + client.getNome() + "-CPF:" + client.getCpf() + ";";
+				ArrayList<Aluguel> listaAlugueis = client.getAlugueis();
+				String ultimoAluguel = "";
+				if(listaAlugueis != null)
+				{
+					Aluguel alug = listaAlugueis.get(listaAlugueis.size()-1);
+				stringClientes+=("CPF: " + client.getCpf() + " Nome: " + client.getNome() + " Último aluguel: " + 
+					Util.formataData(alug.getDatainicio()) + ";" );
 			}
 		}
 		else throw new SystemException("Não existem clientes cadastrados!");
@@ -158,7 +164,9 @@ public class Sistema{
 		
 		if(!listaCarros.isEmpty()){
 			for(Carro car: listaCarros){
-				stringCarros+="Placa:" + car.getPlaca() + "-Modelo:" + car.getModelo() + ";";
+				ArrayList<Aluguel> listaAlugueis = car.getAlugueis();
+				String nomeCliente = car.isAlugado() ? " Cliente: " + listaAlugueis.get(listaAlugueis.size()-1).getCliente().getNome() : "";
+				stringCarros+="Placa:" + car.getPlaca() + " Modelo:" + car.getModelo() + nomeCliente + ";";
 			}
 		}
 		else throw new SystemException("Não existem carros cadastrados!");
@@ -169,16 +177,23 @@ public class Sistema{
 	public static String listarAlugueisFinalizados() throws SystemException{
 		String stringAlugueis = "";
 		ArrayList<Aluguel> listaAlugueis = locadora.getAlugueis();
+		int days = 0;
 		
 		if(!listaAlugueis.isEmpty()){
 			for(Aluguel alug: listaAlugueis){
-				if(alug.isFinalizado())
-					stringAlugueis+="ID:" + alug.getId() + "-Cliente:" + alug.getCliente().getNome() + "-Carro:" +
-							alug.getCarro().getPlaca() + "-Valor:" + alug.getValor() + "-Inicio: " + 
-							Util.formataData(alug.getDatainicio()) + "-Fim: "  + Util.formataData(alug.getDatafim()) + ";";
+				if(alug.isFinalizado()){
+					String dataInit = Util.formataData(alug.getDatainicio());
+					String dataFim = Util.formataData(alug.getDatafim());
+					
+					days += Integer.parseInt(dataFim.split("/")[0]) - Integer.parseInt(dataInit.split("/")[0]);
+					
+					stringAlugueis+="ID:" + alug.getId() + " Carro:" + alug.getCarro().getPlaca() + " Cliente:" + 
+							alug.getCliente().getNome()  + " Valor:" + alug.getValor() + " Inicio: " + 
+							dataInit + " Fim: "  + dataFim + " Quantidade de dias de todos os alugueis: " + days + ";";
+				}
 			}
 			
-			if(stringAlugueis == null) throw new SystemException("Não existem alugueis finalizados!");
+			if(stringAlugueis == "") throw new SystemException("Não existem alugueis finalizados!");
 		}
 		else throw new SystemException("Não exisem alugueis cadastrados!");
 		
@@ -195,9 +210,8 @@ public class Sistema{
 				Date fim = alug.getDatafim();
 				
 				if( Util.formataDataDia(today).equals(Util.formataDataDia(fim) ) && !alug.isFinalizado()){
-					alugueisHoje+="ID:" + alug.getId() + "-Cliente:" + alug.getCliente().getNome() + "-Carro:" +
-							alug.getCarro().getPlaca() + "-Valor:" + alug.getValor() + "-Inicio:" + 
-							Util.formataData(alug.getDatainicio()) + "-Fim:"  + Util.formataData(alug.getDatafim()) + ";";
+					alugueisHoje+="ID:" + alug.getId() + "Carro: " + alug.getCarro().getPlaca() + " Cliente:" + 
+							alug.getCliente().getNome();
 				}
 			}
 			
