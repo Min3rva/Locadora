@@ -14,6 +14,8 @@ public class Application {
 	public static void main(String args[]){
 		Scanner sc = new Scanner(System.in);
 		
+		flow00();
+		
 		int op = 1;
 		
 		while(op != 0){
@@ -56,7 +58,7 @@ public class Application {
 		placa = cs.next();
 		System.out.print("Valor da diária: ");
 		diaria = cs.nextDouble();
-		System.out.print("Data início (dd/MM/yyyy)");
+		System.out.print("Data início (dd/MM/yyyy): ");
 		di = cs.next();
 		System.out.print("Hora inicio (HH:mm:ss): ");
 		hi = cs.next();
@@ -65,12 +67,56 @@ public class Application {
 		System.out.print("Hora fim (HH:mm:ss): ");
 		hf = cs.next();
 		
+		String[] dataInit  = di.split("/");
+		String[] dataFinal = df.split("/");
+		String[] horaInit  = hi.split(":");
+		String[] horaFinal = hf.split(":");
+		
+		if((dataInit.length + horaInit.length == 6) && ( dataFinal.length + horaFinal.length == 6)){
+			GregorianCalendar calendarInit = new GregorianCalendar(Integer.parseInt(dataInit[2]), Integer.parseInt(dataInit[1])-1, 
+					Integer.parseInt(dataInit[0]), Integer.parseInt(horaInit[0]), Integer.parseInt(horaInit[1]));
+			GregorianCalendar calendarFinal = new GregorianCalendar(Integer.parseInt(dataFinal[2]), Integer.parseInt(dataFinal[1])-1, 
+					Integer.parseInt(dataFinal[0]), Integer.parseInt(horaFinal[0]), Integer.parseInt(horaFinal[1]));
+
+			try{
+				Aluguel alug = Sistema.alugarCarro(cpf, placa, diaria, calendarInit.getTime(), calendarFinal.getTime());
+				System.out.println("Aluguel realizado com sucesso!\nValor: " + alug.getValor());
+			}
+			catch (Exception e){
+				System.out.println(e.getMessage());
+			}
+			
+			
+			
+		}
+		
+		
 //		try{
 //			
 //		}
 //		catch (Exception e){
 //			System.out.println(e.getMessage());
 //		}
+	}
+	
+	public static void flow00(){
+		try{
+			Sistema.cadastrarCliente("Joãozinho", "016.123.753-10");
+			Sistema.cadastrarCliente("Mariazinha", "016.123.753-11");
+			Sistema.cadastrarCliente("Zezinho", "016.123.753-12");
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+		try{
+			Sistema.cadastrarCarro("ABC0000", "Gol");
+			Sistema.cadastrarCarro("ABC0001", "Uno");
+			Sistema.cadastrarCarro("ABC0002", "Palio");
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 	
 }
