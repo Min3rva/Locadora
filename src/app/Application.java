@@ -125,7 +125,7 @@ public class Application {
 		Scanner cs = new Scanner(System.in);
 		String placa;
 		
-		System.out.println("Placa do carro (AAANNNN): ");
+		System.out.print("Placa do carro (AAANNNN): ");
 		placa = cs.next();
 		
 		try{
