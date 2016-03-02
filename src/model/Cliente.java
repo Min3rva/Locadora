@@ -11,7 +11,7 @@ public class Cliente {
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
 	public Cliente(String nome, String cpf){
-		this.nome = nome;
+		this.nome = nome.toUpperCase();
 		this.cpf = cpf;
 	}
 	
@@ -25,7 +25,7 @@ public class Cliente {
 	}
 	
 	public void setNome(String nome) {
-		this.nome = nome;
+		this.nome = nome.toUpperCase();
 	}
 	
 	public String getCpf() {

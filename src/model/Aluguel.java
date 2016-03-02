@@ -18,8 +18,8 @@ public class Aluguel {
 		double diffTime = (fim.getTime() - inicio.getTime())/86400000; 
 		datainicio = inicio;
 		datafim = fim;
-		valor = valorDia*diffTime;
 		diaria = valorDia;
+		valor = (valorDia*diffTime > 0 ? valorDia*diffTime : diaria);
 		carro = car;
 		cliente = client;
 		finalizado = false;

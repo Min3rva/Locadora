@@ -12,7 +12,7 @@ public class Carro {
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
 	public Carro(String placa, String modelo){
-		this.placa = placa;
+		this.placa = placa.toUpperCase();
 		this.modelo = modelo;
 		alugado = false;
 	}
@@ -28,7 +28,7 @@ public class Carro {
 	}
 	
 	public void setPlaca(String placa) {
-		this.placa = placa;
+		this.placa = placa.toUpperCase();
 	}
 	
 	public String getModelo() {

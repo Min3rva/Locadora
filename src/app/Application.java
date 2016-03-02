@@ -1,6 +1,5 @@
 package app;
 
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 
@@ -62,9 +61,9 @@ public class Application {
 	
 	public static void flow00(){
 		try{
-			Sistema.cadastrarCliente("Joãozinho", "016.123.753-10");
-			Sistema.cadastrarCliente("Mariazinha", "016.123.753-11");
-			Sistema.cadastrarCliente("Zezinho", "016.123.753-12");
+			Sistema.cadastrarCliente("João", "016.123.753-10");
+			Sistema.cadastrarCliente("Maria", "016.123.753-11");
+			Sistema.cadastrarCliente("José", "016.123.753-12");
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
@@ -90,7 +89,7 @@ public class Application {
 		System.out.print("Placa do carro (AAANNNN): ");
 		placa = cs.next();
 		System.out.print("Valor da diária: ");
-		diaria = cs.nextDouble();
+		diaria = Double.parseDouble(cs.next());
 		System.out.print("Data início (dd/MM/yyyy): ");
 		di = cs.next();
 		System.out.print("Hora inicio (HH:mm:ss): ");
@@ -119,6 +118,7 @@ public class Application {
 				System.out.println(e.getMessage());
 			}
 		}
+		
 	}
 	
 	public static void flow02(){
@@ -135,6 +135,7 @@ public class Application {
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
+		
 	}
 	
 	public static void flow03(){

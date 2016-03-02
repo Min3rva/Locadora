@@ -11,7 +11,7 @@ public class Locadora {
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
 	public Locadora(){
-		//TODO
+		
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class Locadora {
 	public Carro localizarCarro(String placa) throws ModelException{
 		
 		for(Carro car: carros){
-			if(car.getPlaca().equals(placa))
+			if(car.getPlaca().equals(placa.toUpperCase()))
 				return car;
 		}
 		
@@ -74,7 +74,7 @@ public class Locadora {
 	public Cliente localizarCliente(String cpf) throws ModelException{
 		
 		for(Cliente client: clientes){
-			if(client.getCpf().equals(cpf))
+			if(client.getCpf().equals(cpf.toUpperCase()))
 				return client;
 		}
 		
