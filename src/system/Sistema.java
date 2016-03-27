@@ -7,6 +7,7 @@ import exceptions.SystemException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class Sistema{
 	
@@ -22,7 +23,7 @@ public class Sistema{
 		}
 		catch (ModelException e){
 			client = new Cliente(nome, cpf);
-			locadora.addCliente(client);
+			locadora.addCliente(nome, client);
 		}
 
 		return client;
@@ -57,14 +58,14 @@ public class Sistema{
 			
 			try{
 				client = locadora.localizarCliente(cpf);
-				boolean aluguelEmAndamento = false;
+				boolean semAluguel = true;
 				
 				ArrayList<Aluguel> listAluguelCliente = client.getAlugueis();
 				
 				if(!listAluguelCliente.isEmpty())
-					aluguelEmAndamento = listAluguelCliente.get(listAluguelCliente.size()-1).isFinalizado();
+					semAluguel = listAluguelCliente.get(listAluguelCliente.size()-1).isFinalizado();
 				
-				if(!aluguelEmAndamento){
+				if(semAluguel){
 				
 					Carro car = null;
 					
@@ -119,6 +120,8 @@ public class Sistema{
 					
 					double newValor = (df-di) <= 0 ?  (di-df)*diaria : (df-di)*2*diaria + aluguel.getValor();
 					
+					newValor-=newValor*0.1;
+					
 					/* Paga no minimo uma diária caso o carro seja devolvido antes de 24h
 					 * Preço mínimo do aluguel
 					 */
@@ -139,10 +142,11 @@ public class Sistema{
 	public static String listarClientes() throws SystemException{
 		String ultimoAluguel = "";
 		String stringClientes = "";
-		ArrayList<Cliente> listaClientes = locadora.getClientes();
+		String cartaoFidelidade = "";
+		TreeMap<String, Cliente> listaClientes = locadora.getClientes();
 		
 		if(!listaClientes.isEmpty()){
-			for(Cliente client: listaClientes){
+			for(Cliente client: listaClientes.values()){
 				ArrayList<Aluguel> listaAlugueis = client.getAlugueis();
 				
 				if(!listaAlugueis.isEmpty()){
@@ -151,7 +155,12 @@ public class Sistema{
 				}
 				else ultimoAluguel = "";
 				
-				stringClientes+=("CPF: " + client.getCpf() + " Nome: " + client.getNome() +  ultimoAluguel + ";" );
+				if(client.getCartao() != null)
+					cartaoFidelidade = " Cartão Fidelidade: " + client.getCartao().getNumerocartao();
+				else cartaoFidelidade = "";
+				
+				stringClientes+=("CPF: " + client.getCpf() + " Nome: " + client.getNome() +  
+						ultimoAluguel + cartaoFidelidade + ";" );
 			}
 		}
 		else throw new SystemException("Não existem clientes cadastrados!");
@@ -223,6 +232,27 @@ public class Sistema{
 		}else throw new SystemException("Não existem alugueis cadastrados!");
 		
 		return alugueisHoje;
+	}
+	
+	public static ClienteFidelidade cadastrarClienteFidelidade(String cpf, String nome, int numeroCartao) 
+			throws SystemException{
+		
+		ClienteFidelidade cartao = null;
+
+		try{
+			Cliente client = locadora.localizarCliente(cpf);			
+			cartao = new ClienteFidelidade(numeroCartao, nome, cpf);
+			client.setCartao(cartao);
+		}
+		catch (ModelException e){
+			throw new SystemException(e.getMessage());
+		}
+		
+		return cartao;
+	}
+	
+	public static void excluirCarro(String placa){
+		//TODO
 	}
 	
 }

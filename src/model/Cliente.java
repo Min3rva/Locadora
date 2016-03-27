@@ -9,6 +9,7 @@ public class Cliente {
 	private String nome;
 	private String cpf;
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
+	private ClienteFidelidade cartao;
 	
 	public Cliente(String nome, String cpf){
 		this.nome = nome.toUpperCase();
@@ -18,6 +19,14 @@ public class Cliente {
 	@Override
 	public String toString() {
 		return "Cliente [nome=" + nome + ", cpf=" + cpf + ", alugueis=" + alugueis.size() + "]";
+	}
+	
+	public ClienteFidelidade getCartao() {
+		return cartao;
+	}
+
+	public void setCartao(ClienteFidelidade cartao) {
+		this.cartao = cartao;
 	}
 	
 	public String getNome() {

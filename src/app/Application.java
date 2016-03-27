@@ -61,9 +61,14 @@ public class Application {
 	
 	public static void flow00(){
 		try{
-			Sistema.cadastrarCliente("João", "111");
-			Sistema.cadastrarCliente("Maria", "222");
-			Sistema.cadastrarCliente("José", "333");
+			Sistema.cadastrarCliente("Maria", "111");
+			Sistema.cadastrarClienteFidelidade("111", "Maria", 0);
+			
+			Sistema.cadastrarCliente("Aninha", "222");
+			Sistema.cadastrarClienteFidelidade("222", "Aninha", 1);
+			
+			Sistema.cadastrarCliente("Zezinho", "333");
+			//Sistema.cadastrarClienteFidelidade("333", "Zezinho", 2);
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());

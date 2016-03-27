@@ -2,13 +2,14 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import exceptions.ModelException;
 
 public class Locadora {
 
 	private String nome;
-	private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+	private TreeMap<String,Cliente> clientes = new TreeMap<String,Cliente>();
 	private HashMap<String,Carro> carros = new HashMap<String,Carro>();
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
@@ -21,7 +22,7 @@ public class Locadora {
 		return "Locadora [nome=" + nome + ", clientes=" + clientes + ", carros=" + carros + ", alugueis=" + alugueis
 				+ "]";
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -30,11 +31,11 @@ public class Locadora {
 		this.nome = nome;
 	}
 	
-	public ArrayList<Cliente> getClientes() {
+	public TreeMap<String,Cliente> getClientes() {
 		return clientes;
 	}
 	
-	public void setClientes(ArrayList<Cliente> clientes) {
+	public void setClientes(TreeMap<String,Cliente> clientes) {
 		this.clientes = clientes;
 	}
 	
@@ -66,14 +67,14 @@ public class Locadora {
 		else throw new ModelException("Carro não cadastrado!");
 	}
 	
-	public void addCliente(Cliente client){
-		clientes.add(client);
+	public void addCliente(String nome, Cliente client){
+		clientes.put(nome,client);
 	}
 	
 	
 	public Cliente localizarCliente(String cpf) throws ModelException{
 		
-		for(Cliente client: clientes){
+		for(Cliente client: clientes.values()){
 			if(client.getCpf().equals(cpf.toUpperCase()))
 				return client;
 		}

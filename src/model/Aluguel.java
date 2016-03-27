@@ -23,6 +23,9 @@ public class Aluguel {
 		carro = car;
 		cliente = client;
 		finalizado = false;
+		
+		if(client.getCartao() != null)
+			valor -= valor*0.1;
 	}
 	
 	@Override
