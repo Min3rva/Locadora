@@ -15,18 +15,15 @@ public class Sistema{
 		
 		Cliente client = null;
 		
-		if(Util.validarCPF(cpf)){
-			try{
-				locadora.localizarCliente(cpf);
-				throw new SystemException("Cliente já cadastrado!");
-			}
-			catch (ModelException e){
-				client = new Cliente(nome, cpf);
-				locadora.addCliente(client);
-			}
+		try{
+			locadora.localizarCliente(cpf);
+			throw new SystemException("Cliente já cadastrado!");
 		}
-		else throw new SystemException("CPF Inválido!");
-		
+		catch (ModelException e){
+			client = new Cliente(nome, cpf);
+			locadora.addCliente(client);
+		}
+
 		return client;
 	}
 	
@@ -34,18 +31,15 @@ public class Sistema{
 	public static Carro cadastrarCarro(String placa, String modelo) throws SystemException{
 		
 		Carro car = null;
-		
-		if(Util.validarPlacaCarro(placa)){
-			try{
-				locadora.localizarCarro(placa);
-				throw new SystemException("Carro já cadastrado!");
-			}
-			catch (ModelException e){
-				car = new Carro(placa, modelo);
-				locadora.addCarro(car);
-			}
+
+		try{
+			locadora.localizarCarro(placa);
+			throw new SystemException("Carro já cadastrado!");
 		}
-		else throw new SystemException("Placa Inválida!");
+		catch (ModelException e){
+			car = new Carro(placa, modelo);
+			locadora.addCarro(car);
+		}
 		
 		return null;
 	}
@@ -58,42 +52,41 @@ public class Sistema{
 		
 		if(datafinal.getTime() > datainicio.getTime())
 		{
-			if(Util.validarCPF(cpf))
-			{
-				Cliente client = null;
+			Cliente client = null;
+			
+			try{
+				client = locadora.localizarCliente(cpf);
 				
-				try{
-					client = locadora.localizarCliente(cpf);
+				ArrayList<Aluguel> listAluguelCliente = client.getAlugueis();
 				
-					if(Util.validarPlacaCarro(placa)){
-						Carro car = null;
-						
-						try{
-							car = locadora.localizarCarro(placa);
-							
-							if(!car.isAlugado()){
-								int id = locadora.getAlugueis().size();
-								result =  new Aluguel(id, datainicio, datafinal, diaria, car, client);
-								locadora.addAluguel(result);
-	
-								car.addAluguel(result);
-								client.addAluguel(result);
-								car.setAlugado(true);
-							}
-							else throw new SystemException("Carro está alugado!");
-						}
-						catch (ModelException e){
-							System.out.println(e.getMessage());
-						}
-						
-					}else throw new SystemException("Placa Inválida!");
+				if(listAluguelCliente.get(listAluguelCliente.size()-1).isFinalizado()){
+				
+					Carro car = null;
 					
+					try{
+						car = locadora.localizarCarro(placa);
+						
+						if(!car.isAlugado()){
+							int id = locadora.getAlugueis().size();
+							result =  new Aluguel(id, datainicio, datafinal, diaria, car, client);
+							locadora.addAluguel(result);
+
+							car.addAluguel(result);
+							client.addAluguel(result);
+							car.setAlugado(true);
+						}
+						else throw new SystemException("Carro está alugado!");
+					}
+					catch (ModelException e){
+						System.out.println(e.getMessage());
+					}
 				}
-				catch(ModelException e){
-					System.out.println(e.getMessage());
-				}
-					
-			}else throw new SystemException("CPF Inválido!");
+				else throw new SystemException("Existe Aluguel em andamento!");
+			}
+			catch(ModelException e){
+				System.out.println(e.getMessage());
+			}
+		
 		}else throw new SystemException("Data final menor que inicial!");
 		
 		return result;
@@ -101,9 +94,7 @@ public class Sistema{
 	
 	
 	public static void devolverCarro(String placa) throws SystemException{
-		
-		if(Util.validarPlacaCarro(placa)){
-			
+
 			Carro car = null;
 			
 			try{
@@ -136,8 +127,6 @@ public class Sistema{
 			catch (ModelException e){
 				throw new SystemException(e.getMessage());
 			}
-			
-		}else throw new SystemException("Placa inválida!");
 		
 	}
 	
@@ -193,7 +182,7 @@ public class Sistema{
 					String dataInit = Util.formataData(alug.getDatainicio());
 					String dataFim = Util.formataData(alug.getDatafim());
 					
-					days += Integer.parseInt(dataFim.split("/")[0]) - Integer.parseInt(dataInit.split("/")[0]);
+					days += (int) Util.diffTime(alug.getDatainicio(), alug.getDatafim());
 					
 					stringAlugueis+="ID:" + alug.getId() + " Carro:" + alug.getCarro().getPlaca() + " Cliente:" + 
 							alug.getCliente().getNome()  + " Valor:" + alug.getValor() + " Inicio: " + 
