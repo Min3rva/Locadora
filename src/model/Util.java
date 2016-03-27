@@ -35,4 +35,7 @@ public class Util {
 		return dataFormatada;
 	}
 	
+	public static double diffTime(Date inicio, Date fim){
+		return (fim.getTime() - inicio.getTime())/86400000;
+	}
 }

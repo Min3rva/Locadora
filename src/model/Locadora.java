@@ -1,14 +1,17 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
+
 import exceptions.ModelException;
 
 public class Locadora {
 
 	private String nome;
-	private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-	private ArrayList<Carro> carros 	= new ArrayList<Carro>();
-	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
+	private TreeMap<String,Cliente> clientes = new TreeMap<String,Cliente>();
+	private TreeMap<String,Carro> carros = new TreeMap<String,Carro>();
+	private TreeMap<Integer, Aluguel> alugueis = new TreeMap<Integer, Aluguel>();
 	
 	public Locadora(){
 		
@@ -19,7 +22,7 @@ public class Locadora {
 		return "Locadora [nome=" + nome + ", clientes=" + clientes + ", carros=" + carros + ", alugueis=" + alugueis
 				+ "]";
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -28,52 +31,50 @@ public class Locadora {
 		this.nome = nome;
 	}
 	
-	public ArrayList<Cliente> getClientes() {
+	public TreeMap<String,Cliente> getClientes() {
 		return clientes;
 	}
 	
-	public void setClientes(ArrayList<Cliente> clientes) {
+	public void setClientes(TreeMap<String,Cliente> clientes) {
 		this.clientes = clientes;
 	}
 	
-	public ArrayList<Carro> getCarros() {
+	public TreeMap<String,Carro> getCarros() {
 		return carros;
 	}
 	
-	public void setCarros(ArrayList<Carro> carros) {
+	public void setCarros(TreeMap<String,Carro> carros) {
 		this.carros = carros;
 	}
 	
-	public ArrayList<Aluguel> getAlugueis() {
+	public TreeMap<Integer, Aluguel> getAlugueis() {
 		return alugueis;
 	}
 	
-	public void setAlugueis(ArrayList<Aluguel> alugueis) {
+	public void setAlugueis(TreeMap<Integer, Aluguel> alugueis) {
 		this.alugueis = alugueis;
 	}
 	
-	public void addCarro(Carro car){
-		carros.add(car);
+	public void addCarro(String placa, Carro car){
+		carros.put(placa.toUpperCase(), car);
 	}
 	
 	public Carro localizarCarro(String placa) throws ModelException{
 		
-		for(Carro car: carros){
-			if(car.getPlaca().equals(placa.toUpperCase()))
-				return car;
-		}
+		Carro car = carros.get(placa.toUpperCase());
 		
-		throw new ModelException("Carro não cadastrado!");
+		if(car != null) return car;
+		else throw new ModelException("Carro não cadastrado!");
 	}
 	
-	public void addCliente(Cliente client){
-		clientes.add(client);
+	public void addCliente(String nome, Cliente client){
+		clientes.put(nome.toUpperCase(),client);
 	}
 	
 	
 	public Cliente localizarCliente(String cpf) throws ModelException{
 		
-		for(Cliente client: clientes){
+		for(Cliente client: clientes.values()){
 			if(client.getCpf().equals(cpf.toUpperCase()))
 				return client;
 		}
@@ -81,17 +82,30 @@ public class Locadora {
 		throw new ModelException("Cliente não cadastrado!");
 	}
 	
+	public void excluirAluguel(int id){
+		alugueis.remove(id);
+	}
+	
+	public void excluirCarro(String placa)throws ModelException{
+		
+		if (localizarCarro(placa) == null)
+			throw new ModelException("Carro não encontrando!");
+		
+		carros.remove(placa.toUpperCase());
+			
+	}
+	
 	public void addAluguel(Aluguel aluguel){
-		alugueis.add(aluguel);
+		alugueis.put(aluguel.getId(), aluguel);
 	}
 	
 	public Aluguel localizarAluguel(int id) throws ModelException{
 		
-		for(Aluguel aluguel: alugueis){
-			if(aluguel.getId() == id)
-				return aluguel;
-		}
+		Aluguel alug = alugueis.get(id);
 		
-		throw new ModelException("Aluguel não cadastrado!");
+		if(alug == null)
+			throw new ModelException("Aluguel não cadastrado!");
+	
+		return alug;
 	}
 }

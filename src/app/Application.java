@@ -41,10 +41,11 @@ public class Application {
 			case 6:
 				flow06();
 				break;
-			}
-			
+			case 7:
+				flow07();
+				break;
+			}			
 		}
-		
 	}
 	
 	public static void showMenu(){
@@ -56,23 +57,25 @@ public class Application {
 		System.out.println("4. Listar carros");
 		System.out.println("5. Listar alugueis finalizados");
 		System.out.println("6. Listar alugueis a serem finalizados hoje");
+		System.out.println("7. Excluir carro");
 		
 	}
 	
 	public static void flow00(){
 		try{
-			Sistema.cadastrarCliente("João", "016.123.753-10");
-			Sistema.cadastrarCliente("Maria", "016.123.753-11");
-			Sistema.cadastrarCliente("José", "016.123.753-12");
+			Sistema.cadastrarClienteFidelidade("111", "Maria", 1);
+			Sistema.cadastrarClienteFidelidade("222", "Aninha", 2);
+			Sistema.cadastrarCliente("Zezinho", "333");
+			//Sistema.cadastrarClienteFidelidade("333", "Zezinho", 2);
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 		
 		try{
-			Sistema.cadastrarCarro("ABC0000", "Gol");
-			Sistema.cadastrarCarro("ABC0001", "Uno");
-			Sistema.cadastrarCarro("ABC0002", "Palio");
+			Sistema.cadastrarCarro("ABC0", "Gol");
+			Sistema.cadastrarCarro("ABC1", "Uno");
+			Sistema.cadastrarCarro("ABC2", "Palio");
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
@@ -84,9 +87,9 @@ public class Application {
 		String cpf, placa, di, df, hi, hf;
 		double diaria;
 		
-		System.out.print("CPF (nnn.nnn.nnn-nn): ");
+		System.out.print("CPF: ");
 		cpf = cs.next();
-		System.out.print("Placa do carro (AAANNNN): ");
+		System.out.print("Placa do carro: ");
 		placa = cs.next();
 		System.out.print("Valor da diária: ");
 		diaria = Double.parseDouble(cs.next());
@@ -125,7 +128,7 @@ public class Application {
 		Scanner cs = new Scanner(System.in);
 		String placa;
 		
-		System.out.print("Placa do carro (AAANNNN): ");
+		System.out.print("Placa do carro: ");
 		placa = cs.next();
 		
 		try{
@@ -194,5 +197,21 @@ public class Application {
 		}
 	}
 	
-	
+	public static void flow07(){
+		
+		Scanner cs = new Scanner(System.in);
+		String placa;
+		
+		System.out.print("Placa do carro: ");
+		placa = cs.next();
+		
+		try{
+			Sistema.excluirCarro(placa);
+			System.out.println("Carro removido com sucesso!");
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+	}
 }

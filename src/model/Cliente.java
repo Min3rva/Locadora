@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import exceptions.ModelException;
 
@@ -8,7 +9,7 @@ public class Cliente {
 	
 	private String nome;
 	private String cpf;
-	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
+	private TreeMap<Integer, Aluguel> alugueis = new TreeMap<Integer, Aluguel>();
 	
 	public Cliente(String nome, String cpf){
 		this.nome = nome.toUpperCase();
@@ -36,17 +37,17 @@ public class Cliente {
 		this.cpf = cpf;
 	}
 	
-	public ArrayList<Aluguel> getAlugueis() {
+	public TreeMap<Integer, Aluguel> getAlugueis() {
 		return alugueis;
 	}
 	
-	public void setAlugueis(ArrayList<Aluguel> alugueis) {
+	public void setAlugueis(TreeMap<Integer, Aluguel> alugueis) {
 		this.alugueis = alugueis;
 	}
 	
 	public void addAluguel(Aluguel aluguel){
 		try{
-			alugueis.add(aluguel);
+			alugueis.put(aluguel.getId(), aluguel);
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
@@ -55,12 +56,16 @@ public class Cliente {
 	
 	public Aluguel localizarAluguel(int id) throws ModelException{
 		
-		for(Aluguel aluguel: alugueis){
-			if(aluguel.getId() == id)
-				return aluguel;
-		}
+		Aluguel alug = alugueis.get(id);
 		
-		throw new ModelException("Aluguel não cadastrado!");
+		if(alug == null) 
+			throw new ModelException("Aluguel não cadastrado!");
+	
+		return alug;
+	}
+	
+	public void excluirAluguel(int id){
+		alugueis.remove(id);
 	}
 
 }

@@ -23,6 +23,9 @@ public class Aluguel {
 		carro = car;
 		cliente = client;
 		finalizado = false;
+		
+		if(client instanceof ClienteFidelidade)
+			valor -= valor*0.1;
 	}
 	
 	@Override
@@ -97,6 +100,8 @@ public class Aluguel {
 		this.cliente = cliente;
 	}
 	
+	public void excluirCarro() {
+		carro = null;
+	}
 	
-
 }
