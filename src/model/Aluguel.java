@@ -24,7 +24,7 @@ public class Aluguel {
 		cliente = client;
 		finalizado = false;
 		
-		if(client.getCartao() != null)
+		if(client instanceof ClienteFidelidade)
 			valor -= valor*0.1;
 	}
 	

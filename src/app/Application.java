@@ -61,12 +61,8 @@ public class Application {
 	
 	public static void flow00(){
 		try{
-			Sistema.cadastrarCliente("Maria", "111");
-			Sistema.cadastrarClienteFidelidade("111", "Maria", 0);
-			
-			Sistema.cadastrarCliente("Aninha", "222");
-			Sistema.cadastrarClienteFidelidade("222", "Aninha", 1);
-			
+			Sistema.cadastrarClienteFidelidade("111", "Maria", 1);
+			Sistema.cadastrarClienteFidelidade("222", "Aninha", 2);
 			Sistema.cadastrarCliente("Zezinho", "333");
 			//Sistema.cadastrarClienteFidelidade("333", "Zezinho", 2);
 		}
@@ -89,9 +85,9 @@ public class Application {
 		String cpf, placa, di, df, hi, hf;
 		double diaria;
 		
-		System.out.print("CPF (nnn.nnn.nnn-nn): ");
+		System.out.print("CPF: ");
 		cpf = cs.next();
-		System.out.print("Placa do carro (AAANNNN): ");
+		System.out.print("Placa do carro: ");
 		placa = cs.next();
 		System.out.print("Valor da diária: ");
 		diaria = Double.parseDouble(cs.next());

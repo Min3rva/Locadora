@@ -29,6 +29,23 @@ public class Sistema{
 		return client;
 	}
 	
+	public static ClienteFidelidade cadastrarClienteFidelidade(String cpf, String nome, int numeroCartao) 
+			throws SystemException{
+		
+		ClienteFidelidade client = null;
+
+		try{
+			locadora.localizarCliente(cpf);			
+			throw new SystemException("Cliente já cadastrado!");
+		}
+		catch (ModelException e){
+			client = new ClienteFidelidade(numeroCartao, nome, cpf);
+			locadora.addCliente(nome, client);
+		}
+		
+		return client;
+	}
+	
 	
 	public static Carro cadastrarCarro(String placa, String modelo) throws SystemException{
 		
@@ -120,7 +137,8 @@ public class Sistema{
 					
 					double newValor = (df-di) <= 0 ?  (di-df)*diaria : (df-di)*2*diaria + aluguel.getValor();
 					
-					newValor-=newValor*0.1;
+					if(aluguel.getCliente() instanceof ClienteFidelidade)
+						newValor-=newValor*0.1;
 					
 					/* Paga no minimo uma diária caso o carro seja devolvido antes de 24h
 					 * Preço mínimo do aluguel
@@ -155,8 +173,10 @@ public class Sistema{
 				}
 				else ultimoAluguel = "";
 				
-				if(client.getCartao() != null)
-					cartaoFidelidade = " Cartão Fidelidade: " + client.getCartao().getNumerocartao();
+				if(client instanceof ClienteFidelidade){
+					ClienteFidelidade c = (ClienteFidelidade) client;
+					cartaoFidelidade = " Cartão Fidelidade: " + c.getNumerocartao();
+				}
 				else cartaoFidelidade = "";
 				
 				stringClientes+=("CPF: " + client.getCpf() + " Nome: " + client.getNome() +  
@@ -232,23 +252,6 @@ public class Sistema{
 		}else throw new SystemException("Não existem alugueis cadastrados!");
 		
 		return alugueisHoje;
-	}
-	
-	public static ClienteFidelidade cadastrarClienteFidelidade(String cpf, String nome, int numeroCartao) 
-			throws SystemException{
-		
-		ClienteFidelidade cartao = null;
-
-		try{
-			Cliente client = locadora.localizarCliente(cpf);			
-			cartao = new ClienteFidelidade(numeroCartao, nome, cpf);
-			client.setCartao(cartao);
-		}
-		catch (ModelException e){
-			throw new SystemException(e.getMessage());
-		}
-		
-		return cartao;
 	}
 	
 	public static void excluirCarro(String placa){
