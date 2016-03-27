@@ -6,6 +6,7 @@ import exceptions.SystemException;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Sistema{
 	
@@ -38,7 +39,7 @@ public class Sistema{
 		}
 		catch (ModelException e){
 			car = new Carro(placa, modelo);
-			locadora.addCarro(car);
+			locadora.addCarro(placa, car);
 		}
 		
 		return null;
@@ -56,10 +57,14 @@ public class Sistema{
 			
 			try{
 				client = locadora.localizarCliente(cpf);
+				boolean aluguelEmAndamento = false;
 				
 				ArrayList<Aluguel> listAluguelCliente = client.getAlugueis();
 				
-				if(listAluguelCliente.get(listAluguelCliente.size()-1).isFinalizado()){
+				if(!listAluguelCliente.isEmpty())
+					aluguelEmAndamento = listAluguelCliente.get(listAluguelCliente.size()-1).isFinalizado();
+				
+				if(!aluguelEmAndamento){
 				
 					Carro car = null;
 					
@@ -157,10 +162,10 @@ public class Sistema{
 	
 	public static String listarCarros() throws SystemException{
 		String stringCarros = "";
-		ArrayList<Carro> listaCarros = locadora.getCarros();
+		HashMap<String,Carro>listaCarros = locadora.getCarros();
 		
 		if(!listaCarros.isEmpty()){
-			for(Carro car: listaCarros){
+			for(Carro car: listaCarros.values()){
 				ArrayList<Aluguel> listaAlugueis = car.getAlugueis();
 				String nomeCliente = car.isAlugado() ? " Cliente: " + listaAlugueis.get(listaAlugueis.size()-1).getCliente().getNome() : "";
 				stringCarros+="Placa:" + car.getPlaca() + " Modelo:" + car.getModelo() + nomeCliente + ";";

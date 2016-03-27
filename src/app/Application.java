@@ -61,18 +61,18 @@ public class Application {
 	
 	public static void flow00(){
 		try{
-			Sistema.cadastrarCliente("João", "016.123.753-10");
-			Sistema.cadastrarCliente("Maria", "016.123.753-11");
-			Sistema.cadastrarCliente("José", "016.123.753-12");
+			Sistema.cadastrarCliente("João", "111");
+			Sistema.cadastrarCliente("Maria", "222");
+			Sistema.cadastrarCliente("José", "333");
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
 		
 		try{
-			Sistema.cadastrarCarro("ABC0000", "Gol");
-			Sistema.cadastrarCarro("ABC0001", "Uno");
-			Sistema.cadastrarCarro("ABC0002", "Palio");
+			Sistema.cadastrarCarro("ABC0", "Gol");
+			Sistema.cadastrarCarro("ABC1", "Uno");
+			Sistema.cadastrarCarro("ABC2", "Palio");
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());

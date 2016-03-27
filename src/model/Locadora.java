@@ -1,13 +1,15 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import exceptions.ModelException;
 
 public class Locadora {
 
 	private String nome;
 	private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
-	private ArrayList<Carro> carros 	= new ArrayList<Carro>();
+	private HashMap<String,Carro> carros = new HashMap<String,Carro>();
 	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
 	
 	public Locadora(){
@@ -36,11 +38,11 @@ public class Locadora {
 		this.clientes = clientes;
 	}
 	
-	public ArrayList<Carro> getCarros() {
+	public HashMap<String,Carro> getCarros() {
 		return carros;
 	}
 	
-	public void setCarros(ArrayList<Carro> carros) {
+	public void setCarros(HashMap<String,Carro> carros) {
 		this.carros = carros;
 	}
 	
@@ -52,18 +54,16 @@ public class Locadora {
 		this.alugueis = alugueis;
 	}
 	
-	public void addCarro(Carro car){
-		carros.add(car);
+	public void addCarro(String placa, Carro car){
+		carros.put(placa, car);
 	}
 	
 	public Carro localizarCarro(String placa) throws ModelException{
 		
-		for(Carro car: carros){
-			if(car.getPlaca().equals(placa.toUpperCase()))
-				return car;
-		}
+		Carro car = carros.get(placa.toUpperCase());
 		
-		throw new ModelException("Carro não cadastrado!");
+		if(car != null) return car;
+		else throw new ModelException("Carro não cadastrado!");
 	}
 	
 	public void addCliente(Cliente client){
