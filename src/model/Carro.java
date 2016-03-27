@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 import exceptions.ModelException;
 
@@ -9,7 +10,7 @@ public class Carro {
 	private String placa;
 	private String modelo;
 	private boolean alugado;
-	private ArrayList<Aluguel> alugueis = new ArrayList<Aluguel>();
+	private TreeMap<Integer, Aluguel> alugueis = new TreeMap<Integer, Aluguel>();
 	
 	public Carro(String placa, String modelo){
 		this.placa = placa.toUpperCase();
@@ -47,26 +48,30 @@ public class Carro {
 		this.alugado = alugado;
 	}
 	
-	public ArrayList<Aluguel> getAlugueis() {
+	public TreeMap<Integer, Aluguel> getAlugueis() {
 		return alugueis;
 	}
 	
-	public void setAlugueis(ArrayList<Aluguel> alugueis) {
+	public void setAlugueis(TreeMap<Integer, Aluguel> alugueis) {
 		this.alugueis = alugueis;
 	}
 	
 	public void addAluguel(Aluguel aluguel){
-		alugueis.add(aluguel);
+		alugueis.put(aluguel.getId(), aluguel);
 	}
 	
 	public Aluguel localizarAluguel(int id) throws ModelException{
 		
-		for(Aluguel aluguel: alugueis){
-			if(aluguel.getId() == id)
-				return aluguel;
-		}
+		Aluguel alug = alugueis.get(id);
 		
-		throw new ModelException("Aluguel não cadastrado!");
+		if(alug == null)
+			throw new ModelException("Aluguel não cadastrado!");
+	
+		return alug;
+	}
+	
+	public void excluirAluguel(int id){
+		alugueis.remove(id);
 	}
 
 }

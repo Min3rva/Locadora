@@ -4,7 +4,6 @@ import model.*;
 import exceptions.ModelException;
 import exceptions.SystemException;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -77,10 +76,15 @@ public class Sistema{
 				client = locadora.localizarCliente(cpf);
 				boolean semAluguel = true;
 				
-				ArrayList<Aluguel> listAluguelCliente = client.getAlugueis();
+				TreeMap<Integer, Aluguel> listAluguelCliente = client.getAlugueis();
+				int key = 0;
+				
+				for(int i: listAluguelCliente.keySet()){
+					key = i;
+				}
 				
 				if(!listAluguelCliente.isEmpty())
-					semAluguel = listAluguelCliente.get(listAluguelCliente.size()-1).isFinalizado();
+					semAluguel = listAluguelCliente.get(key).isFinalizado();
 				
 				if(semAluguel){
 				
@@ -128,8 +132,13 @@ public class Sistema{
 				{
 					
 					Date data = new Date();
-					ArrayList<Aluguel> listAlugueis = car.getAlugueis();
-					Aluguel aluguel = listAlugueis.get(listAlugueis.size()-1);
+					TreeMap<Integer, Aluguel> listAlugueis = car.getAlugueis();
+					int key = 0;
+					
+					for(int i: listAlugueis.keySet()){
+						key = i;
+					}
+					Aluguel aluguel = listAlugueis.get(key);
 					
 					long di = aluguel.getDatainicio().getTime()/86400000;
 					long df = data.getTime()/86400000;
@@ -165,10 +174,17 @@ public class Sistema{
 		
 		if(!listaClientes.isEmpty()){
 			for(Cliente client: listaClientes.values()){
-				ArrayList<Aluguel> listaAlugueis = client.getAlugueis();
+				TreeMap<Integer, Aluguel> listaAlugueis = client.getAlugueis();
 				
 				if(!listaAlugueis.isEmpty()){
-					Aluguel alug = listaAlugueis.get(listaAlugueis.size()-1);
+					int key = 0;
+					
+					for(int i: listaAlugueis.keySet()){
+						key = i;
+					}
+					
+					Aluguel alug = listaAlugueis.get(key);
+					
 					ultimoAluguel = " Último aluguel: " + Util.formataData(alug.getDatainicio());
 				}
 				else ultimoAluguel = "";
@@ -191,12 +207,19 @@ public class Sistema{
 	
 	public static String listarCarros() throws SystemException{
 		String stringCarros = "";
-		HashMap<String,Carro>listaCarros = locadora.getCarros();
+		TreeMap<String,Carro>listaCarros = locadora.getCarros();
 		
 		if(!listaCarros.isEmpty()){
 			for(Carro car: listaCarros.values()){
-				ArrayList<Aluguel> listaAlugueis = car.getAlugueis();
-				String nomeCliente = car.isAlugado() ? " Cliente: " + listaAlugueis.get(listaAlugueis.size()-1).getCliente().getNome() : "";
+				TreeMap<Integer, Aluguel> listaAlugueis = car.getAlugueis();
+				int key = 0;
+				
+				for(int i: listaAlugueis.keySet()){
+					key = i;
+				}
+				
+				String nomeCliente = car.isAlugado() ? " Cliente: " + listaAlugueis.get(key).getCliente().getNome() : "";
+				
 				stringCarros+="Placa:" + car.getPlaca() + " Modelo:" + car.getModelo() + nomeCliente + ";";
 			}
 		}
@@ -207,11 +230,11 @@ public class Sistema{
 	
 	public static String listarAlugueisFinalizados() throws SystemException{
 		String stringAlugueis = "";
-		ArrayList<Aluguel> listaAlugueis = locadora.getAlugueis();
+		TreeMap<Integer, Aluguel> listaAlugueis = locadora.getAlugueis();
 		int days = 0;
 		
 		if(!listaAlugueis.isEmpty()){
-			for(Aluguel alug: listaAlugueis){
+			for(Aluguel alug: listaAlugueis.values()){
 				if(alug.isFinalizado()){
 					String dataInit = Util.formataData(alug.getDatainicio());
 					String dataFim = Util.formataData(alug.getDatafim());
@@ -233,11 +256,11 @@ public class Sistema{
 	
 	public static String listarAlugueisHoje() throws SystemException{
 		String alugueisHoje = "";
-		ArrayList<Aluguel> listaAlugueis = locadora.getAlugueis();
+		TreeMap<Integer, Aluguel> listaAlugueis = locadora.getAlugueis();
 		Date today = new Date();
 		
 		if(!listaAlugueis.isEmpty()){
-			for(Aluguel alug: listaAlugueis){
+			for(Aluguel alug: listaAlugueis.values()){
 				Date fim = alug.getDatafim();
 				
 				if( Util.formataDataDia(today).equals(Util.formataDataDia(fim) ) && !alug.isFinalizado()){
@@ -254,8 +277,39 @@ public class Sistema{
 		return alugueisHoje;
 	}
 	
-	public static void excluirCarro(String placa){
-		//TODO
+	public static void excluirCarro(String placa) throws SystemException{
+		Carro car = null;
+		
+		try{
+			car = locadora.localizarCarro(placa);
+			
+			if(!car.isAlugado()){
+				TreeMap<Integer, Aluguel> alugueis = car.getAlugueis();
+				if (alugueis != null)
+				{
+					for(Aluguel alug: alugueis.values()){
+						int id = alug.getId();
+							locadora.excluirAluguel(id);
+							car.excluirAluguel(id);
+							alug.getCliente().excluirAluguel(id);
+					}
+				}
+				
+				try{
+					locadora.excluirCarro(placa);
+				}
+				catch (ModelException e){
+					throw new SystemException(e.getMessage());
+				}
+			}
+			else throw new SystemException("O carro está alugado!");
+			
+		}
+		catch(ModelException e){
+			throw new SystemException(e.getMessage());
+		}
+		
+		
 	}
 	
 }

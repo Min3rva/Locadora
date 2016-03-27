@@ -41,10 +41,11 @@ public class Application {
 			case 6:
 				flow06();
 				break;
-			}
-			
+			case 7:
+				flow07();
+				break;
+			}			
 		}
-		
 	}
 	
 	public static void showMenu(){
@@ -56,6 +57,7 @@ public class Application {
 		System.out.println("4. Listar carros");
 		System.out.println("5. Listar alugueis finalizados");
 		System.out.println("6. Listar alugueis a serem finalizados hoje");
+		System.out.println("7. Excluir carro");
 		
 	}
 	
@@ -126,7 +128,7 @@ public class Application {
 		Scanner cs = new Scanner(System.in);
 		String placa;
 		
-		System.out.print("Placa do carro (AAANNNN): ");
+		System.out.print("Placa do carro: ");
 		placa = cs.next();
 		
 		try{
@@ -195,5 +197,21 @@ public class Application {
 		}
 	}
 	
-	
+	public static void flow07(){
+		
+		Scanner cs = new Scanner(System.in);
+		String placa;
+		
+		System.out.print("Placa do carro: ");
+		placa = cs.next();
+		
+		try{
+			Sistema.excluirCarro(placa);
+			System.out.println("Carro removido com sucesso!");
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+		
+	}
 }

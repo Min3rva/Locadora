@@ -100,6 +100,8 @@ public class Aluguel {
 		this.cliente = cliente;
 	}
 	
+	public void excluirCarro() {
+		carro = null;
+	}
 	
-
 }
