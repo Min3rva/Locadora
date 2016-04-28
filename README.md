@@ -3,3 +3,6 @@ Projeto de uma locadora de carros para a cadeira de "Programação Orientada a O
 "Tecnologia em Sistemas para Internet" do IFPB-João Pessoa.
 
 O software está em desenvolvimento por Talita Valéria, utilizando a linguagem java.
+
+Rafaeeeeel
+
